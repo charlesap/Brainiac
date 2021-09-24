@@ -31,7 +31,12 @@ clean:
 	if [ -d .obnc ] ; then rm -rf .obnc ; fi
 	if [ -f gobrainiac ] ; then rm gobrainiac ; fi
 	if [ -f Brainiac.class ] ; then rm Brainiac.class ; fi
-	rm brainiac.c brainiac.py Brainiac.Mod brainiac.f90 Brainiac.java brainiac.go
+	if [ -f brainiac.c ] ;    then rm brainiac.c ; fi
+	if [ -f brainiac.f90 ] ;  then rm brainiac.f90 ; fi
+	if [ -f Brainiac.Mod ] ;  then rm Brainiac.Mod ; fi
+	if [ -f brainiac.go ] ;   then rm brainiac.go ; fi
+	if [ -f brainiac.py ] ;   then rm brainiac.py ; fi
+	if [ -f Brainiac.java ] ; then rm Brainiac.java ; fi
 
 #test:
 #	./cbrainiac cbraintest
