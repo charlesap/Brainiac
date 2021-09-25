@@ -30,7 +30,7 @@ clean:
 	if [ -f obrainiac ] ; then rm obrainiac ; fi
 	if [ -d .obnc ] ; then rm -rf .obnc ; fi
 	if [ -f gobrainiac ] ; then rm gobrainiac ; fi
-	if [ -f Brainiac.class ] ; then rm Brainiac.class ; fi
+	rm -f *.class
 	if [ -f brainiac.c ] ;    then rm brainiac.c ; fi
 	if [ -f brainiac.f90 ] ;  then rm brainiac.f90 ; fi
 	if [ -f Brainiac.Mod ] ;  then rm Brainiac.Mod ; fi

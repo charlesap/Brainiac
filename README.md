@@ -3,8 +3,9 @@ biologically inspired neural networks
 
 Derived from Numenta's research and directly influenced by the Nupic code base
 
-To run every example of te Brainiac algorithm you will need compilers or interpreters for C, Fortran, Java, Go, Oberon, and Python.
+To run all ports of the Brainiac algorithm you will need compilers or interpreters for C, Fortran, Java, Go, Oberon, and Python.
 
+# Prerequisites on Debian
 To obtain the compilers and interpreters for Debian 11 Bullseye you may do the following:
 
 (as root)
@@ -16,13 +17,26 @@ To obtain the compilers and interpreters for Debian 11 Bullseye you may do the f
  * wget http://miasap.se/obnc/downloads/obnc-libext_0.7.0.tar.gz; tar xvzf obnc-libext_0.7.0.tar.gz
  * cd obnc-0.16.1; ./build; ./install
  * cd ../obnc-libext-0.7.0; ./build; ./install
+ * log out and log back in to obtain the new PATH
 
-(as a user in a new shell, you may have to log out and log back in again)
+# Prerequisites on OSX
+To obtain the compilers and interpreters for OSX you may do the following:
+
+(as a user with administrative access)
+ * /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+ * brew update
+ * brew install SDL2
+ * brew install gcc
+ * brew install go
+
+# Compiling and running Brainiac
+
+Compiling:
  * git clone https://github.com/charlesap/Brainiac
  * cd Brainiac
  * make clean; make all
 
-(as the user)
+Running:
  * ./cbrainiac foo
  * ./fbrainiac foo
  * ./obrainiac foo
