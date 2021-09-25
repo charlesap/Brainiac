@@ -1,0 +1,6 @@
+k,v1,v2
+package,Brainiac,v0.0.1
+from,github.com/charlesap,whenever
+license,MIT,CP
+doc,suplib,simulate neural behavior.
+p,Brainiac.Mod,
