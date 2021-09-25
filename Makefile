@@ -38,10 +38,11 @@ clean:
 	if [ -f brainiac.py ] ;   then rm brainiac.py ; fi
 	if [ -f Brainiac.java ] ; then rm Brainiac.java ; fi
 
-#test:
-#	./cbrainiac cbraintest
-#	./fbrainiac fbraintest
-#	./obrainiac obraintest
-#	./gobrainiac gobraintest
-#	python3 brainiac.py pybraintest
+test: cbrainiac fbrainiac obrainiac gobrainiac brainiac.py Brainiac.class
+	./cbrainiac cbraintest
+	./fbrainiac fbraintest
+	./obrainiac obraintest
+	./gobrainiac gobraintest
+	python3 brainiac.py pybraintest
+	java Brainiac jbraintest
 
