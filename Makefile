@@ -4,7 +4,7 @@ OC=obnc
 GC=go build
 JC=javac
 
-brainiac.c brainiac.f90 Brainiac.Mod brainiac.py Brainiac.java brainiac.go: brainiac.poly
+brainiac.c brainiac.f90 Brainiac.Mod src/brainiac/brainiac.py Brainiac.java brainiac.go: brainiac.poly
 	bash poly-extract.sh
 
 cbrainiac: brainiac.c
@@ -22,7 +22,7 @@ gobrainiac: brainiac.go
 Brainiac.class: Brainiac.java
 	$(JC) Brainiac.java
 
-all: cbrainiac fbrainiac obrainiac gobrainiac brainiac.py Brainiac.class
+all: cbrainiac fbrainiac obrainiac gobrainiac src/brainiac/brainiac.py Brainiac.class
 
 clean:
 	rm -f cbrainiac 
@@ -33,11 +33,19 @@ clean:
 	rm -f *.class
 #	rm -f brainiac.c  brainiac.f90  Brainiac.Mod  brainiac.go  brainiac.py  Brainiac.java
 
-test: cbrainiac fbrainiac obrainiac gobrainiac brainiac.py Brainiac.class
+test: cbrainiac fbrainiac obrainiac gobrainiac src/brainiac/brainiac.py Brainiac.class
 	./cbrainiac cbraintest
 	./fbrainiac fbraintest
 	./obrainiac obraintest
 	./gobrainiac gobraintest
-	python3 brainiac.py pybraintest
+	python3 src/brainiac/brainiac.py pybraintest
 	java Brainiac jbraintest
 
+distclean:
+	rm -rf dist
+
+dist: __init__.py LICENSE pyproject.toml README.md setup.cfg src/brainiac/brainiac.py
+	python3 -m build
+
+upload: 
+	python3 -m twine upload --repository pypi dist/*
