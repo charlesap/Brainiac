@@ -28,6 +28,12 @@ To obtain the compilers and interpreters for OSX you may do the following:
  * brew install SDL2
  * brew install gcc
  * brew install go
+ * brew install wget
+ * wget http://miasap.se/obnc/downloads/obnc_0.16.1.tar.gz; tar xvzf obnc_0.16.1.tar.gz
+ * wget http://miasap.se/obnc/downloads/obnc-libext_0.7.0.tar.gz; tar xvzf obnc-libext_0.7.0.tar.gz
+ * cd obnc-0.16.1; ./build; sudo ./install
+ * cd ../obnc-libext-0.7.0; ./build; sudo ./install
+
 
 # Compiling and running Brainiac
 
