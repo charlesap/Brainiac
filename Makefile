@@ -33,13 +33,13 @@ clean:
 	rm -f *.class
 #	rm -f brainiac.c  brainiac.f90  Brainiac.Mod  brainiac.go  brainiac.py  Brainiac.java
 
-test: cbrainiac fbrainiac obrainiac gobrainiac src/brainiac/brainiac.py Brainiac.class
-	./cbrainiac cbraintest
-	./fbrainiac fbraintest
-	./obrainiac obraintest
-	./gobrainiac gobraintest
-	python3 src/brainiac/brainiac.py pybraintest
-	java Brainiac jbraintest
+test: cbrainiac fbrainiac obrainiac gobrainiac src/brainiac/brainiac.py Brainiac.class tests/commontest
+	./cbrainiac tests/commontest
+	./fbrainiac tests/commontest
+	./obrainiac tests/commontest
+	./gobrainiac tests/commontest
+	python3 src/brainiac/brainiac.py tests/commontest
+	java Brainiac tests/commontest
 
 distclean:
 	rm -rf dist
@@ -49,3 +49,7 @@ dist: __init__.py LICENSE pyproject.toml README.md setup.cfg src/brainiac/braini
 
 upload: 
 	python3 -m twine upload --repository pypi dist/*
+
+patchbump: version
+	bash patchbump.sh
+	
