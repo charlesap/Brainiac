@@ -99,7 +99,7 @@ jobs:
           make fbrainiac
           #make obrainiac
           make gobrainiac
-          #make Brainiac.class
+          make Brainiac.class
         shell: bash
 
       - name: Test
@@ -109,7 +109,7 @@ jobs:
           ./fbrainiac tests/commontest
           #./obrainiac tests/commontest
           ./gobrainiac tests/commontest
-          #python3 src/brainiac/brainiac.py tests/commontest
-          #java Brainiac tests/commontest
+          python3 src/brainiac/brainiac.py tests/commontest
+          java Brainiac tests/commontest
         shell: bash
 
