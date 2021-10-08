@@ -16,13 +16,19 @@ jobs:
         run: |
           sudo add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu `lsb_release -sc` main universe restricted multiverse"
           sudo apt-get update -y -qq
-          sudo apt-get install libsdl2-dev
+          sudo apt-get install libsdl2-dev libgc-dev
+          wget http://miasap.se/obnc/downloads/obnc_0.16.1.tar.gz; tar xvzf obnc_0.16.1.tar.gz
+          wget http://miasap.se/obnc/downloads/obnc-libext_0.7.0.tar.gz; tar xvzf obnc-libext_0.7.0.tar.gz
+          cd obnc-0.16.1; ./build; ./install
+          cd ../obnc-libext-0.7.0; ./build; ./install
+
 
       - name: Build
         run: |
           make clean
           make cbrainiac
           make fbrainiac
+          make obrainiac
           make gobrainiac
           #cd oxfsgo
           #go get github.com/io-core/oxfs-linux/oxfsgo
@@ -34,6 +40,7 @@ jobs:
           ./cbrainiac tests/commontest
           ./fbrainiac tests/commontest
           ./gobrainiac tests/commontest
+          python3 src/brainiac/brainiac.py tests/commontest
           #cd oxfsgo/test
           #bash test.sh
 
@@ -53,6 +60,10 @@ jobs:
           brew install SDL2
           which gfortran-9
           ln -s /usr/local/bin/gfortran-9 /usr/local/bin/gfortran
+          wget http://miasap.se/obnc/downloads/obnc_0.16.1.tar.gz; tar xvzf obnc_0.16.1.tar.gz
+          wget http://miasap.se/obnc/downloads/obnc-libext_0.7.0.tar.gz; tar xvzf obnc-libext_0.7.0.tar.gz
+          cd obnc-0.16.1; ./build; ./install
+          cd ../obnc-libext-0.7.0; ./build; ./install
           
 
       - name: Build
@@ -60,6 +71,7 @@ jobs:
           make clean
           make cbrainiac
           make fbrainiac
+          make obrainiac
           make gobrainiac
           #cd oxfsgo
           #go get github.com/io-core/oxfs-linux/oxfsgo
@@ -71,6 +83,7 @@ jobs:
           ./cbrainiac tests/commontest
           ./fbrainiac tests/commontest
           ./gobrainiac tests/commontest
+          python3 src/brainiac/brainiac.py tests/commontest
           #cd oxfsgo/test
           #bash test.sh
 
