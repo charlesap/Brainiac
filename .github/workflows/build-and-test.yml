@@ -82,8 +82,8 @@ jobs:
       - name: Install Dependencies
         run: | 
           pwd
-          wget https://miasap.se/obnc/downloads/obnc_0.16.1_win32.zip 
-          unzip obnc_0.16.1_win32.zip
+          C:\msys64\usr\bin\wget.exe https://miasap.se/obnc/downloads/obnc_0.16.1_win32.zip 
+          7z x obnc_0.16.1_win32.zip
           ls
           #brew install SDL2
           #which gfortran-9
