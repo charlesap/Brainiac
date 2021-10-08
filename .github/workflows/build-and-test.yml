@@ -19,8 +19,8 @@ jobs:
           sudo apt-get install libsdl2-dev libgc-dev
           wget http://miasap.se/obnc/downloads/obnc_0.16.1.tar.gz; tar xvzf obnc_0.16.1.tar.gz
           wget http://miasap.se/obnc/downloads/obnc-libext_0.7.0.tar.gz; tar xvzf obnc-libext_0.7.0.tar.gz
-          cd obnc-0.16.1; ./build; ./install
-          cd ../obnc-libext-0.7.0; ./build; ./install
+          cd obnc-0.16.1; ./build; sudo ./install
+          cd ../obnc-libext-0.7.0; ./build; sudo ./install
 
 
       - name: Build
