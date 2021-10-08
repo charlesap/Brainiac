@@ -17,6 +17,7 @@ jobs:
         run: |
           make clean
           make cbrainiac
+          make fbrainiac
           make gobrainiac
           #cd oxfsgo
           #go get github.com/io-core/oxfs-linux/oxfsgo
@@ -26,6 +27,7 @@ jobs:
         run: |
           ls
           ./cbrainiac tests/commontest
+          ./fbrainiac tests/commontest
           ./gobrainiac tests/commontest
           #cd oxfsgo/test
           #bash test.sh
@@ -45,6 +47,7 @@ jobs:
         run: |
           make clean
           make cbrainiac
+          make fbrainiac
           make gobrainiac
           #cd oxfsgo
           #go get github.com/io-core/oxfs-linux/oxfsgo
@@ -54,6 +57,7 @@ jobs:
         run: |
           ls
           ./cbrainiac tests/commontest
+          ./fbrainiac tests/commontest
           ./gobrainiac tests/commontest
           #cd oxfsgo/test
           #bash test.sh
