@@ -97,10 +97,13 @@ jobs:
   Windows-build:
     runs-on: windows-latest
     steps:
-      - name: Install 7Zip PowerShell Module
-        shell: powershell
-        run: Install-Module 7Zip4PowerShell -Force -Verbose
-      - uses: actions/checkout@v2
+      - name: Add Msys64 to PATH
+        if: matrix.os == 'windows-latest'
+        run: echo "::add-path::/c/msys64/mingw64/bin:/c/msys64/usr/bin"
+        shell: bash
+
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: GetGo  
         uses: actions/setup-go@v2
@@ -109,7 +112,8 @@ jobs:
 
       - name: Install Dependencies
         run: | 
-          ls
+          pwd
+          
           #brew install SDL2
           #which gfortran-9
           #ln -s /usr/local/bin/gfortran-9 /usr/local/bin/gfortran
@@ -117,17 +121,17 @@ jobs:
           #wget http://miasap.se/obnc/downloads/obnc-libext_0.7.0.tar.gz; tar xvzf obnc-libext_0.7.0.tar.gz
           #cd obnc-0.16.1; ./build; ./install
           #cd ../obnc-libext-0.7.0; ./build; ./install
-          
+        shell: bash
 
       - name: Build
         run: |
-          ls
-          #make clean
-          #make cbrainiac
+          make clean
+          make cbrainiac
           #make fbrainiac
           #make obrainiac
           #make gobrainiac
           #make Brainiac.class
+        shell: bash
 
       - name: Test
         run: |
@@ -138,5 +142,5 @@ jobs:
           #./gobrainiac tests/commontest
           #python3 src/brainiac/brainiac.py tests/commontest
           #java Brainiac tests/commontest
-
+        shell: bash
 
