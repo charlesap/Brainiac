@@ -51,7 +51,8 @@ jobs:
       - name: Install Dependencies
         run: | 
           brew install SDL2
-          brew install --cask gfortran
+          which gfortran-9
+          alias gfortran='gfortran-9'
           brew install wget
 
       - name: Build
