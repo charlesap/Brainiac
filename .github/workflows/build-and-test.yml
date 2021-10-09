@@ -30,7 +30,8 @@ jobs:
 
       - name: Test
         run: |
-          make test
+          ls
+          #make test
 
   MacOS-build:
     runs-on: macOS-latest
@@ -61,7 +62,8 @@ jobs:
 
       - name: Test
         run: |
-          make test
+          ls
+          #make test
 
   Windows-build:
     runs-on: windows-latest
@@ -82,8 +84,8 @@ jobs:
       - name: Install Dependencies
         run: | 
           pwd
-          /usr/bin/wget.exe https://miasap.se/obnc/downloads/obnc_0.16.1_win32.zip 
-          7z x obnc_0.16.1_win32.zip
+          curl -fsSL -o obnc.zip https://miasap.se/obnc/downloads/obnc_0.16.1_win32.zip 
+          7z x obnc.zip
           ls
           #brew install SDL2
           #which gfortran-9
