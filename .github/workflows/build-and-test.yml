@@ -86,7 +86,12 @@ jobs:
           pwd
           curl -fsSL -o obnc.zip https://miasap.se/obnc/downloads/obnc_0.16.1_win32.zip 
           7z x obnc.zip
-          ls
+          echo "------------obnc-0.16.1---------------"
+          ls obnc-0.16.1/
+          cp -a obnc-0.16.1/* /c/msys64/usr/bin/
+          echo "-----------/c/msys64/usr/bin/-----------"
+          ls /c/msys64/usr/bin/
+          which obnc
           #brew install SDL2
           #which gfortran-9
           #ln -s /usr/local/bin/gfortran-9 /usr/local/bin/gfortran
