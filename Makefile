@@ -34,12 +34,12 @@ clean:
 #	rm -f brainiac.c  brainiac.f90  Brainiac.Mod  brainiac.go  brainiac.py  Brainiac.java
 
 test: cbrainiac fbrainiac obrainiac gobrainiac src/brainiac/brainiac.py Brainiac.class tests/commontest
-	./cbrainiac tests/commontest
-	./fbrainiac tests/commontest
-	./obrainiac tests/commontest
-	./gobrainiac tests/commontest
-	python3 src/brainiac/brainiac.py tests/commontest
-	java Brainiac tests/commontest
+	./cbrainiac tests/commontest > x.output; diff x.output tests/commontest.output
+	./fbrainiac tests/commontest > x.output; diff x.output tests/commontest.output
+	./obrainiac tests/commontest > x.output; diff x.output tests/commontest.output
+	./gobrainiac tests/commontest > x.output; diff x.output tests/commontest.output
+	python3 src/brainiac/brainiac.py tests/commontest > x.output; diff x.output tests/commontest.output
+	java Brainiac tests/commontest > x.output; diff x.output tests/commontest.output
 
 distclean:
 	rm -rf dist
