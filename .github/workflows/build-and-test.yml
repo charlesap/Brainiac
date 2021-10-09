@@ -90,7 +90,7 @@ jobs:
           ls obnc-0.16.1/
           cp -a obnc-0.16.1/* /c/msys64/usr/bin/
           
-          obnc -h
+          #obnc -h
           cat obnc-0.16.1/README.txt
           cat obnc-0.16.1/obnc.bat
           cat obnc-0.16.1/obnc-path.bat
