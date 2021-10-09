@@ -89,9 +89,13 @@ jobs:
           echo "------------obnc-0.16.1---------------"
           ls obnc-0.16.1/
           cp -a obnc-0.16.1/* /c/msys64/usr/bin/
-          echo "-----------/c/msys64/usr/bin/-----------"
-          ls /c/msys64/usr/bin/
-          which obnc
+          
+          obnc -h
+          cat obnc-0.16.1/README.txt
+          cat obnc-0.16.1/obnc.bat
+          cat obnc-0.16.1/obnc-path.bat
+          cat obnc-0.16.1/obnc-compile.bat
+
           #brew install SDL2
           #which gfortran-9
           #ln -s /usr/local/bin/gfortran-9 /usr/local/bin/gfortran
