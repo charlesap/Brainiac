@@ -31,7 +31,7 @@ clean:
 	rm -rf .obnc 
 	rm -f gobrainiac 
 	rm -f *.class
-#	rm -f brainiac.c  brainiac.f90  Brainiac.Mod  brainiac.go  brainiac.py  Brainiac.java
+	rm -f brainiac.c  brainiac.f90  Brainiac.Mod  brainiac.go  brainiac.py  Brainiac.java
 
 test: cbrainiac fbrainiac obrainiac gobrainiac src/brainiac/brainiac.py Brainiac.class tests/commontest
 	./cbrainiac tests/commontest > x.output; diff x.output tests/commontest.output
