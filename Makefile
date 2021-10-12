@@ -6,6 +6,7 @@ JC=javac
 
 brainiac.c brainiac.f90 Brainiac.Mod src/brainiac/brainiac.py Brainiac.java brainiac.go: brainiac.poly
 	bash poly-extract.sh
+	cp brainiac.py src/brainiac/brainiac.py
 
 cbrainiac: brainiac.c
 	$(CC) -o cbrainiac brainiac.c 
