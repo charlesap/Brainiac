@@ -23,9 +23,13 @@ jobs:
           cd ../obnc-libext-0.7.0; ./build; sudo ./install
 
 
-      - name: Build and Test
+      - name: Build
         run: |
           make clean
+          make all
+
+      - name: Test
+        run: |
           make test
 
   MacOS-build:
@@ -57,8 +61,7 @@ jobs:
 
       - name: Test
         run: |
-          ls
-          #make test
+          make test
 
   Windows-build:
     runs-on: windows-latest
