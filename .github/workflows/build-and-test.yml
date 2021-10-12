@@ -30,8 +30,7 @@ jobs:
 
       - name: Test
         run: |
-          ls
-          #make test
+          make test
 
   MacOS-build:
     runs-on: macOS-latest
