@@ -6,7 +6,6 @@ JC=javac
 
 brainiac.c brainiac.f90 Brainiac.Mod src/brainiac/brainiac.py Brainiac.java brainiac.go: brainiac.poly
 	bash poly-extract.sh
-	cp brainiac.py src/brainiac/brainiac.py
 
 cbrainiac: brainiac.c
 	$(CC) -o cbrainiac brainiac.c 
@@ -32,7 +31,7 @@ clean:
 	rm -rf .obnc 
 	rm -f gobrainiac 
 	rm -f *.class
-	rm -f brainiac.c  brainiac.f90  Brainiac.Mod  brainiac.go  brainiac.py  Brainiac.java
+	rm -f brainiac.c  brainiac.f90  Brainiac.Mod  brainiac.go  src/brainiac/brainiac.py  Brainiac.java
 
 test: cbrainiac fbrainiac obrainiac gobrainiac src/brainiac/brainiac.py Brainiac.class tests/commontest
 	./cbrainiac tests/commontest > x.output; diff x.output tests/commontest.output
@@ -41,6 +40,13 @@ test: cbrainiac fbrainiac obrainiac gobrainiac src/brainiac/brainiac.py Brainiac
 	./gobrainiac tests/commontest > x.output; diff x.output tests/commontest.output
 	python3 src/brainiac/brainiac.py tests/commontest > x.output; diff x.output tests/commontest.output
 	java Brainiac tests/commontest > x.output; diff x.output tests/commontest.output
+
+memusage: cbrainiac fbrainiac obrainiac gobrainiac src/brainiac/brainiac.py Brainiac.class tests/commontest
+	@echo -n "c "; memusage ./cbrainiac tests/commontest 2>&1 | grep peak | awk '{print $$9;}'
+	@echo -n "f "; memusage ./fbrainiac tests/commontest 2>&1 | grep peak | awk '{print $$9;}'
+	@echo -n "o "; memusage ./obrainiac tests/commontest 2>&1 | grep peak | awk '{print $$9;}'
+	@echo -n "p "; memusage python3 src/brainiac/brainiac.py tests/commontest 2>&1 | grep peak | awk '{print $$9;}'
+	@echo -n "j "; memusage java Brainiac tests/commontest 2>&1 | grep peak | awk '{print $$9;}'
 
 distclean:
 	rm -rf dist
