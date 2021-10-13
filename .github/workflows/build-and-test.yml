@@ -61,6 +61,7 @@ jobs:
 
       - name: Test
         run: |
+          lsblk
           make test
 
   Windows-build:
