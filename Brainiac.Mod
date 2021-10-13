@@ -10,15 +10,24 @@ CONST
   APP = 48; (* Apical per Pyramidal *)                   
   PinL2 = 32; (* Pyramidal in L2 *)                      
   PinL4 = 32; (* Pyramidal in L4 *)                      
+  PinL5 = 32; (* Pyramidal in L5 *)                      
   PinL6 = 32; (* Pyramidal in L6 *)                      
   PinTh = 4;  (* Pyramidal in Thalmus *)                 
+  MCinC = 128;(* Minicolumns in a Column *)              
+  CinP = 9 ; (* Columns in a Patch *)                    
                                                          
 TYPE                                                     
   Potential = RECORD Excited: BOOLEAN END;               
                                                          
+                                                         
+                                                         
   Synapse = INTEGER; (* PTR to Potential w/o GC *)       
                                                          
+                                                         
+                                                         
   Dendrite = ARRAY SPD OF Synapse;                       
+                                                         
+                                                         
                                                          
                                                          
                                                          
@@ -34,9 +43,13 @@ TYPE
                                                          
                                                          
                                                          
+                                                         
+                                                         
+                                                         
   Minicolumn = RECORD                                    
                  L2: ARRAY PinL2 OF Pyramidal;           
                  L4: ARRAY PinL4 OF Pyramidal;           
+                 L5: ARRAY PinL5 OF Pyramidal;           
                  L6: ARRAY PinL6 OF Pyramidal;           
                  Thalmus: ARRAY PinTh OF Pyramidal       
                END;                                      
@@ -47,32 +60,70 @@ TYPE
                                                          
                                                          
                                                          
-PROCEDURE initialize;                                    
+                                                         
+                                                         
+  Column = RECORD                                        
+                 MC: ARRAY MCinC OF Minicolumn           
+               END;                                      
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+  Patch = RECORD                                         
+                  C: ARRAY CinP OF Column                
+               END;                                      
+  PPatch = POINTER TO Patch;                             
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
 VAR                                                      
-  i,res:INTEGER;                                         
+  P: PPatch;                                             
+                                                         
+PROCEDURE initialize(VAR p: PPatch);                     
+VAR                                                      
+  i,res,dp,np:INTEGER;                                   
   arg:ARRAY 256 OF CHAR;                                 
 BEGIN                                                    
   IF Args.count > 0 THEN                                 
     Args.Get(0, arg, res);                               
     IF res = 0 THEN                                      
-      Out.String("  initializing"); Out.Ln;              
-      Out.String("  "); Out.String(arg); Out.Ln;         
+      Out.String("  initializing ");                     
+      Out.String(arg); Out.Ln;                           
+      dp:=SPD+PPP+BPP+APP;                               
+      np:=(PinL2+PinL4+PinL5+PinL6+PinTh)*MCinC*CinP;    
+      Out.String("   dendrites:");                       
+      Out.Int(dp*np,12); Out.Ln;                         
+      Out.String("   p cells  :");                       
+      Out.Int(np,12); Out.Ln;                            
+      Out.String("   miniclmns:");                       
+      Out.Int(CinP*MCinC,12); Out.Ln;                    
+      NEW(p)                                             
     ELSE                                                 
       Out.String("  config?"); Out.Ln;                   
     END                                                  
   ELSE                                                   
     Out.String("  parameter?"); Out.Ln;                  
-  END                                                    
+  END;                                                   
+                                                         
 END initialize;                                          
                                                          
                                                          
-PROCEDURE iterate;                                       
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+PROCEDURE iterate(VAR p: PPatch);                        
+                                                         
 BEGIN                                                    
   Out.String("  iterating"); Out.Ln;                     
-                                                         
 END iterate;                                             
                                                          
-PROCEDURE summarize;                                     
+PROCEDURE summarize(VAR p: PPatch);                      
 BEGIN                                                    
   Out.String("  summarizing"); Out.Ln;                   
                                                          
@@ -81,9 +132,9 @@ END summarize;
 BEGIN                                                    
   Out.String(" Brainiac"); Out.Ln;                       
                                                          
-  initialize;                                            
-  iterate;                                               
-  summarize;                                             
+  initialize(P);                                         
+  iterate(P);                                            
+  summarize(P);                                          
                                                          
                                                          
                                                          

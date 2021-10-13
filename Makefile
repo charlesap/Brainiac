@@ -22,7 +22,10 @@ gobrainiac: brainiac.go
 Brainiac.class: Brainiac.java
 	$(JC) Brainiac.java
 
-all: cbrainiac fbrainiac obrainiac gobrainiac src/brainiac/brainiac.py Brainiac.class
+Brainiac.jar: Brainiac.class
+	jar cfe Brainiac.jar Brainiac *.class
+
+all: cbrainiac fbrainiac obrainiac gobrainiac src/brainiac/brainiac.py Brainiac.jar
 
 clean:
 	rm -f cbrainiac 
@@ -31,15 +34,17 @@ clean:
 	rm -rf .obnc 
 	rm -f gobrainiac 
 	rm -f *.class
+	rm -f Brainiac.jar
 	rm -f brainiac.c  brainiac.f90  Brainiac.Mod  brainiac.go  src/brainiac/brainiac.py  Brainiac.java
 
-test: cbrainiac fbrainiac obrainiac gobrainiac src/brainiac/brainiac.py Brainiac.class tests/commontest
-	./cbrainiac tests/commontest > x.output; diff x.output tests/commontest.output
-	./fbrainiac tests/commontest > x.output; diff x.output tests/commontest.output
-	./obrainiac tests/commontest > x.output; diff x.output tests/commontest.output
-	./gobrainiac tests/commontest > x.output; diff x.output tests/commontest.output
-	python3 src/brainiac/brainiac.py tests/commontest > x.output; diff x.output tests/commontest.output
-	java Brainiac tests/commontest > x.output; diff x.output tests/commontest.output
+test: cbrainiac fbrainiac obrainiac gobrainiac src/brainiac/brainiac.py Brainiac.jar tests/commontest
+	cd tests; ../cbrainiac foo > x.output; diff x.output commontest.output
+	cd tests; ../fbrainiac foo > x.output; diff x.output commontest.output
+	cd tests; ../obrainiac foo > x.output; diff x.output commontest.output
+	cd tests; ../gobrainiac foo > x.output; diff x.output commontest.output
+	cd tests; python3 ../src/brainiac/brainiac.py foo > x.output; diff x.output commontest.output
+	cd tests; java -jar ../Brainiac.jar foo > x.output; diff x.output commontest.output
+	
 
 memusage: cbrainiac fbrainiac obrainiac gobrainiac src/brainiac/brainiac.py Brainiac.class tests/commontest
 	@echo -n "c "; memusage ./cbrainiac tests/commontest 2>&1 | grep peak | awk '{print $$9;}'
