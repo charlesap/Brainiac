@@ -87,7 +87,7 @@ jobs:
         run: | 
           pwd
           mv dep/obnc_0.16.1_win32.zip ./
-          7z x obnc.zip
+          7z x obnc_0.16.1_win32.zip
           echo "------------obnc-0.16.1---------------"
           ls obnc-0.16.1/
           cp -a obnc-0.16.1/* /c/msys64/usr/bin/
