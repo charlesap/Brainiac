@@ -36,14 +36,27 @@ clean:
 	rm -f *.class
 	rm -f Brainiac.jar
 	rm -f brainiac.c  brainiac.f90  Brainiac.Mod  brainiac.go  src/brainiac/brainiac.py  Brainiac.java
+	rm -f ctest ftest otest gotest pytest jtest
 
-test: cbrainiac fbrainiac obrainiac gobrainiac src/brainiac/brainiac.py Brainiac.jar tests/commontest
-	cd tests; ../cbrainiac foo > x.output; diff x.output commontest.output
-	cd tests; ../fbrainiac foo > x.output; diff x.output commontest.output
-	cd tests; ../obrainiac foo > x.output; diff x.output commontest.output
-	cd tests; ../gobrainiac foo > x.output; diff x.output commontest.output
-	cd tests; python3 ../src/brainiac/brainiac.py foo > x.output; diff x.output commontest.output
-	cd tests; java -jar ../Brainiac.jar foo > x.output; diff x.output commontest.output
+ctest: cbrainiac
+	cd tests; ../cbrainiac foo > ../ctest; diff ../ctest commontest.output
+
+ftest: fbrainiac
+	cd tests; ../fbrainiac foo > ../ftest; diff ../ftest commontest.output
+
+otest: obrainiac
+	cd tests; ../obrainiac foo > ../otest; diff ../otest commontest.output
+
+gotest: gobrainiac
+	cd tests; ../gobrainiac foo > ../gotest; diff ../gotest commontest.output
+
+pytest: src/brainiac/brainiac.py
+	cd tests; python3 ../src/brainiac/brainiac.py foo > ../pytest; diff ../pytest commontest.output
+
+jtest: Brainiac.jar
+	cd tests; java -jar ../Brainiac.jar foo > ../jtest; diff ../jtest commontest.output
+
+test: ctest ftest otest gotest pytest jtest
 	
 
 memusage: cbrainiac fbrainiac obrainiac gobrainiac src/brainiac/brainiac.py Brainiac.class tests/commontest
