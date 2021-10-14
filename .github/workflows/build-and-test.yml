@@ -120,6 +120,12 @@ jobs:
       - name: Test
         run: |
           cd tests
+          FSUtil File CreateNew b-foo-9-128-4-32-32-32-32-0-0-0.pex 0x100000
+          FSUtil Sparse SetFlag b-foo-9-128-4-32-32-32-32-0-0-0.pex
+          FSUtil Sparse SetRange b-foo-9-128-4-32-32-32-32-0-0-0.pex 0 0x100000
+          FSUtil File CreateNew b-foo-9-128-4-32-32-32-32-48-48-48-40-0-0-0.dnd 0x100000
+          FSUtil Sparse SetFlag b-foo-9-128-4-32-32-32-32-48-48-48-40-0-0-0.dnd
+          FSUtil Sparse SetRange b-foo-9-128-4-32-32-32-32-48-48-48-40-0-0-0.dnd 0 0x100000
           ../cbrainiac foo
           ../fbrainiac foo
           #./obrainiac tests/commontest
