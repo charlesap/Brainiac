@@ -30,7 +30,8 @@ jobs:
 
       - name: Test
         run: |
-          lsblk
+          dd if=/dev/zero of=tests/b-foo-9-128-4-32-32-32-32-0-0-0.pex bs=1 count=0 seek=1216512
+          dd if=/dev/zero of=tests/b-foo-9-128-4-32-32-32-32-48-48-48-40-0-0-0.dnd bs=1 count=0 seek=3503554560
           make test
 
   MacOS-build:
