@@ -30,6 +30,7 @@ jobs:
 
       - name: Test
         run: |
+          lsblk
           make test
 
   MacOS-build:
@@ -61,7 +62,6 @@ jobs:
 
       - name: Test
         run: |
-          lsblk
           make test
 
   Windows-build:
