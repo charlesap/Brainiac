@@ -114,7 +114,7 @@ jobs:
           make fbrainiac
           #make obrainiac
           make gobrainiac
-          make Brainiac.class
+          make Brainiac.jar
         shell: bash
 
       - name: Test
