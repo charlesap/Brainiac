@@ -57,7 +57,15 @@ jtest: Brainiac.jar
 	cd tests; java -jar ../Brainiac.jar foo > ../jtest; diff ../jtest commontest.output
 
 test: ctest ftest otest gotest pytest jtest
-	
+
+pretty: src/brainiac/brainiac.py brainiac.go
+	black src/brainiac/brainiac.py
+	go fmt brainiac.go
+
+srcpush: brainiac.c brainiac.f90 src/brainiac/brainiac.py Brainiac.Mod Brainiac.java brainiac.go
+	git add brainiac.c brainiac.f90 src/brainiac/brainiac.py Brainiac.Mod Brainiac.java brainiac.go
+	git commit -m 'sync to brainiac.poly'
+	git push origin
 
 memusage: cbrainiac fbrainiac obrainiac gobrainiac src/brainiac/brainiac.py Brainiac.class tests/commontest
 	@echo -n "c "; memusage ./cbrainiac tests/commontest 2>&1 | grep peak | awk '{print $$9;}'
