@@ -1,5 +1,5 @@
 /* brainiac.c */                                           
-                                                           
+#include <stdint.h>                                        
 #include <stdbool.h>                                       
 #include <stdio.h>                                         
 #include <stdlib.h>                                        
@@ -10,11 +10,17 @@
 #define APP   48  // Apical per Pyramidal                  
 #define PinL2   32  // Pyramidal in L2                     
 #define PinL4   32  // Pyramidal in L4                     
+#define Acc4    64                                         
 #define PinL5   32  // Pyramidal in L5                     
+#define Acc5    96                                         
 #define PinL6   32  // Pyramidal in L6                     
+#define Acc6    128                                        
 #define PinTh   4   // Pyramidal in Thalmus                
+#define AccTh   132                                        
 #define MCinC   128 // Minicolumns in a Column             
 #define CinP    9   // Columns in a Patch                  
+#define NP      152064                                     
+                                                           
                                                            
                                                            
 typedef struct { bool Excited;} Potential;                 
@@ -83,8 +89,38 @@ typedef struct {
                                                            
                                                            
                                                            
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+void la2sa( int a,int*c,int*mc,int*lv,int*lvo ){           
+                             int mci = a  % AccTh;         
+  int mco = a  / AccTh; *mc = mco % MCinC;                 
+  int co = a / (AccTh*MCinC); *c= co % CinP;               
+  if      (mci<PinL2) {*lv=0;  *lvo=mci;                   
+  }else if(mci<Acc4)  {*lv=1;  *lvo=mci-PinL2;             
+  }else if(mci<Acc5)  {*lv=2;  *lvo=mci-Acc4;              
+  }else if(mci<Acc6)  {*lv=3;  *lvo=mci-Acc5;              
+  }else if(mci<AccTh) {*lv=4;  *lvo=mci-Acc6;              
+  }else               {*lv=-1; *lvo=-1;                    
+  }                                                        
+}                                                          
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
 Patch * initialize( int argc, char *argv[]){               
-  FILE * fpex; FILE * fdnd; int dp; int np; Patch *P;      
+  FILE * fpex; FILE * fdnd; int dp,   i,j ; Patch *P;      
   char  hdr[4096]; char dndfn[1024]; char pexfn[1024];     
   if ( argc > 1 ) {                                        
     printf("  initializing %s\n",argv[1]);                 
@@ -98,12 +134,17 @@ Patch * initialize( int argc, char *argv[]){
       if(fdnd){                                            
         fgets(hdr,4096,(FILE *)fpex);                      
         dp= SPD+PPP+BPP+APP;                               
-        np=(PinL2+PinL4+PinL5+PinL6+PinTh)*MCinC*CinP;     
-         printf("   dendrites:    %d\n",dp*np);            
-         printf("   p cells  :      %d\n",np);             
+                                                           
+         printf("   dendrites:    %d\n",dp*NP);            
+         printf("   p cells  :      %d\n",NP);             
          printf("   miniclmns:        %d\n",CinP*MCinC);   
          P = (Patch *)malloc(sizeof(Patch));               
+         int c,mc,lv,lvo;                                  
+         for(i=0;i<NP;i++){                                
+           la2sa(i,&c,&mc,&lv,&lvo);                       
+      //   printf("--%d,%d,%d,%d,%d\n",i,c,mc,lv,lvo);     
                                                            
+         }                                                 
       }else{                                               
         printf("  file %s?\n",dndfn);                      
       }                                                    
@@ -115,6 +156,9 @@ Patch * initialize( int argc, char *argv[]){
   }                                                        
   return(P);                                               
 }                                                          
+                                                           
+                                                           
+                                                           
                                                            
                                                            
 void iterate(Patch *P){                                    

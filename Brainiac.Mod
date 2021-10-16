@@ -1,7 +1,7 @@
 (* Brainiac.Mod *)                                       
 MODULE Brainiac;                                         
                                                          
-IMPORT Args := extArgs, Err := extErr, Out;              
+IMPORT Args := extArgs, Err := extErr, Out, Files;       
                                                          
 CONST                                                    
   SPD = 40; (* Synapses per Dendrite *)                  
@@ -10,11 +10,17 @@ CONST
   APP = 48; (* Apical per Pyramidal *)                   
   PinL2 = 32; (* Pyramidal in L2 *)                      
   PinL4 = 32; (* Pyramidal in L4 *)                      
+  Acc4  = 32 + PinL2;                                    
   PinL5 = 32; (* Pyramidal in L5 *)                      
+  Acc5  = 32 + Acc4;                                     
   PinL6 = 32; (* Pyramidal in L6 *)                      
+  Acc6  = 32 + Acc5;                                     
   PinTh = 4;  (* Pyramidal in Thalmus *)                 
+  AccTh = 4  + Acc6;                                     
   MCinC = 128;(* Minicolumns in a Column *)              
   CinP = 9 ; (* Columns in a Patch *)                    
+  NP = 152064;                                           
+                                                         
                                                          
 TYPE                                                     
   Potential = RECORD Excited: BOOLEAN END;               
@@ -83,34 +89,72 @@ TYPE
 VAR                                                      
   P: PPatch;                                             
                                                          
+PROCEDURE NL; BEGIN Out.Ln END NL;                       
+PROCEDURE OI(I,X:INTEGER); BEGIN Out.Int(I,X) END OI;    
+PROCEDURE OS(S:ARRAY OF CHAR);BEGIN Out.String(S) END OS;
+PROCEDURE SAP(VAR t: ARRAY OF CHAR;s: ARRAY OF CHAR);    
+VAR x,y:INTEGER; BEGIN x:=0; WHILE t[x]#0X DO INC(x) END;
+  y:=0;WHILE s[y]#0X DO t[x]:=s[y];INC(x);INC(y) END;    
+  t[x]:=0X;                                              
+END SAP;                                                 
+                                                         
+PROCEDURE la2sa(a:INTEGER; VAR c,mc,lv,lvo: INTEGER);    
+                                                         
+VAR mci,mco,co: INTEGER;                                 
+BEGIN mci := a MOD AccTh; mco := a DIV AccTh;            
+ mc:=mco MOD MCinC;co:=a DIV(AccTh*MCinC);c:=co MOD CinP;
+  IF    mci<PinL2 THEN lv:=0;  lvo:=mci                  
+  ELSIF mci<Acc4  THEN lv:=1;  lvo:=mci-PinL2            
+  ELSIF mci<Acc5  THEN lv:=2;  lvo:=mci-Acc4             
+  ELSIF mci<Acc6  THEN lv:=3;  lvo:=mci-Acc5             
+  ELSIF mci<AccTh THEN lv:=4;  lvo:=mci-Acc6             
+  ELSE                 lv:=-1; lvo:=-1                   
+  END                                                    
+END la2sa;                                               
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
 PROCEDURE initialize(VAR p: PPatch);                     
-VAR                                                      
-  i,res,dp,np:INTEGER;                                   
-  arg:ARRAY 256 OF CHAR;                                 
+CONST td ="-9-128-4-32-32-32-32-48-48-48-40-0-0-0.dnd";  
+      tp ="-9-128-4-32-32-32-32-0-0-0.pex";              
+VAR i,res,dp,c,mc,lv,lvo: INTEGER; fdnd,fpex: Files.File;
+      arg,pexfn,dndfn:ARRAY 256 OF CHAR;                 
 BEGIN                                                    
-  IF Args.count > 0 THEN                                 
-    Args.Get(0, arg, res);                               
+  IF Args.count > 0 THEN Args.Get(0, arg, res);          
     IF res = 0 THEN                                      
-      Out.String("  initializing ");                     
-      Out.String(arg); Out.Ln;                           
-      dp:=SPD+PPP+BPP+APP;                               
-      np:=(PinL2+PinL4+PinL5+PinL6+PinTh)*MCinC*CinP;    
-      Out.String("   dendrites:");                       
-      Out.Int(dp*np,12); Out.Ln;                         
-      Out.String("   p cells  :");                       
-      Out.Int(np,12); Out.Ln;                            
-      Out.String("   miniclmns:");                       
-      Out.Int(CinP*MCinC,12); Out.Ln;                    
-      NEW(p)                                             
-    ELSE                                                 
-      Out.String("  config?"); Out.Ln;                   
+      OS("  initializing "); OS(arg); NL;                
+      pexfn:="b-";SAP(pexfn,arg);SAP(pexfn,tp);          
+      dndfn:="b-";SAP(dndfn,arg);SAP(dndfn,td);          
+      fpex:=Files.Old(pexfn);                            
+      IF fpex # NIL  THEN                                
+        fdnd:=Files.Old(dndfn);                          
+        IF fdnd # NIL  THEN                              
+          dp:=SPD+PPP+BPP+APP;                           
+                                                         
+          OS("   dendrites:"); OI(dp*NP,12); NL;         
+          OS("   p cells  :"); OI(NP,12); NL;            
+          OS("   miniclmns:"); OI(CinP*MCinC,12); NL;    
+          NEW(p);                                        
+          i:=0; WHILE (i<NP) DO                          
+            la2sa(i,c,mc,lv,lvo);                        
+    (*      OS("--");OI(i,8);OI(c,8);OI(mc,8);           
+            OI(lv,8);OI(lvo,8);NL;      *)               
+            INC(i)                                       
+          END                                            
+        ELSE  OS("  file "); OS(dndfn); OS("?"); NL;     
+        END                                              
+      ELSE  OS("  file "); OS(pexfn); OS("?"); NL;       
+      END                                                
+    ELSE  OS("  config?"); NL;                           
     END                                                  
-  ELSE                                                   
-    Out.String("  parameter?"); Out.Ln;                  
-  END;                                                   
-                                                         
+  ELSE  OS("  parameter?"); NL;                          
+  END                                                    
 END initialize;                                          
-                                                         
                                                          
                                                          
                                                          
