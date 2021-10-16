@@ -99,6 +99,11 @@ func initialize() *Patch {
 				fmt.Println("   dendrites:   ", dp*NP)
 				fmt.Println("   p cells  :     ", NP)
 				fmt.Println("   miniclmns:       ", CinP*MCinC)
+				for i := 0; i < NP; i++ {
+					//    c,mc,lv,lvo:=la2sa(i)
+					//  fmt.Println("--",i,c,mc,lv,lvo)
+
+				}
 				fpex.Close()
 				fdnd.Close()
 			} else {
