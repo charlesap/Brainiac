@@ -30,8 +30,8 @@ jobs:
 
       - name: Test
         run: |
-          dd if=/dev/zero of=tests/b-foo-9-96-4-28-28-28-28-0-0-0.pex bs=1 count=0 seek=1216512
-          dd if=/dev/zero of=tests/b-foo-9-96-4-28-28-28-28-32-32-32-40-0-0-0.dnd bs=1 count=0 seek=3503554560
+          dd if=/dev/zero of=tests/b-foo-9-96-4-28-28-28-28-0-0-0.pex bs=1 count=0 seek=534528
+          dd if=/dev/zero of=tests/b-foo-9-96-4-28-28-28-28-32-32-32-40-0-0-0.dnd bs=1 count=0 seek=2052587520
           make test
 
   MacOS-build:
@@ -63,8 +63,8 @@ jobs:
 
       - name: Test
         run: |
-          dd if=/dev/zero of=tests/b-foo-9-96-4-28-28-28-28-0-0-0.pex bs=1 count=0 seek=1216512
-          dd if=/dev/zero of=tests/b-foo-9-96-4-28-28-28-28-32-32-32-40-0-0-0.dnd bs=1 count=0 seek=3503554560
+          dd if=/dev/zero of=tests/b-foo-9-96-4-28-28-28-28-0-0-0.pex bs=1 count=0 seek=534528
+          dd if=/dev/zero of=tests/b-foo-9-96-4-28-28-28-28-32-32-32-40-0-0-0.dnd bs=1 count=0 seek=2052587520
           make test
 
   Windows-build:
