@@ -3,6 +3,9 @@
 #include <stdbool.h>                                       
 #include <stdio.h>                                         
 #include <stdlib.h>                                        
+#include <sys/time.h>                                      
+                                                           
+                                                           
                                                            
 #define PYRAMIDAL 0                                        
 #define INHIBITOR 1                                        
@@ -133,8 +136,10 @@ typedef struct {
 Patch * initialize( int argc, char *argv[]){               
   FILE * fpex; FILE * fdnd; int dp,   i,j ; Patch *P;      
   char  hdr[4096]; char dndfn[1024]; char pexfn[1024];     
+  struct timeval tvs,tve;                                  
   if ( argc > 1 ) {                                        
     printf("  initializing %s\n",argv[1]);                 
+    gettimeofday(&tvs,NULL);                               
     sprintf(dndfn,"b-%s-%s",argv[1],                       
       "9-96-4-28-28-28-28-32-32-32-40-0-0-0.dnd");         
     sprintf(pexfn,"b-%s-%s",argv[1],                       
@@ -167,17 +172,6 @@ Patch * initialize( int argc, char *argv[]){
               printf("  read dnd?\n"); exit(1);            
            }                                               
                                                            
-                                                           
-                                                           
-                                                           
-                                                           
-                                                           
-                                                           
-                                                           
-                                                           
-                                                           
-                                                           
-                                                           
 //   printf("--%d,%d,%d,%d,%d,%d,%d\n",i,c,mc,ni,lv,lvo,x);
          }                                                 
       }else{                                               
@@ -186,6 +180,15 @@ Patch * initialize( int argc, char *argv[]){
     }else{                                                 
       printf("  file %s?\n",pexfn);                        
     }                                                      
+    gettimeofday(&tve,NULL);                               
+    printf("  MSEC INIT: %d\n",tve.tv_usec-tvs.tv_usec);   
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
   }else{                                                   
     printf("  parameter?\n");                              
   }                                                        
