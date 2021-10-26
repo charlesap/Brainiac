@@ -39,22 +39,22 @@ clean:
 	rm -f ctest ftest otest gotest pytest jtest
 
 ctest: cbrainiac
-	cd tests; ../cbrainiac foo > ../ctest; diff ../ctest commontest.output
+	cd tests; ../cbrainiac foo | grep -v MSEC > ../ctest; diff ../ctest commontest.output
 
 ftest: fbrainiac
-	cd tests; ../fbrainiac foo > ../ftest; diff ../ftest commontest.output
+	cd tests; ../fbrainiac foo | grep -v MSEC > ../ftest; diff ../ftest commontest.output
 
 otest: obrainiac
-	cd tests; ../obrainiac foo > ../otest; diff ../otest commontest.output
+	cd tests; ../obrainiac foo | grep -v MSEC > ../otest; diff ../otest commontest.output
 
 gotest: gobrainiac
-	cd tests; ../gobrainiac foo > ../gotest; diff ../gotest commontest.output
+	cd tests; ../gobrainiac foo | grep -v MSEC > ../gotest; diff ../gotest commontest.output
 
 pytest: src/brainiac/brainiac.py
-	cd tests; python3 ../src/brainiac/brainiac.py foo > ../pytest; diff ../pytest commontest.output
+	cd tests; python3 ../src/brainiac/brainiac.py foo | grep -v MSEC > ../pytest; diff ../pytest commontest.output
 
 jtest: Brainiac.jar
-	cd tests; java -jar ../Brainiac.jar foo > ../jtest; diff ../jtest commontest.output
+	cd tests; java -jar ../Brainiac.jar foo | grep -v MSEC > ../jtest; diff ../jtest commontest.output
 
 test: ctest ftest otest gotest pytest jtest
 
