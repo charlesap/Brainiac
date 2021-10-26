@@ -1,7 +1,8 @@
  Brainiac
   initializing foo
-   dendrites:    27979776
-   p cells  :      152064
-   miniclmns:        1152
+   dendrites:    13630464
+   p cells  :      100224
+   miniclmns:         864
+   loading...
   iterating
   summarizing
