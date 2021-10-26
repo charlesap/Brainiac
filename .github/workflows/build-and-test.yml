@@ -21,7 +21,7 @@ jobs:
           tar xvzf dep/obnc-libext_0.7.0.tar.gz
           cd obnc-0.16.1; ./build; sudo ./install
           cd ../obnc-libext-0.7.0; ./build; sudo ./install
-
+          pip install numpy
 
       - name: Build
         run: |
@@ -54,7 +54,7 @@ jobs:
           tar xvzf dep/obnc-libext_0.7.0.tar.gz
           cd obnc-0.16.1; ./build; ./install
           cd ../obnc-libext-0.7.0; ./build; ./install
-          
+          pip install numpy
 
       - name: Build
         run: |
