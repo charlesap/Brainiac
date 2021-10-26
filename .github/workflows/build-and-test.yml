@@ -54,7 +54,7 @@ jobs:
           tar xvzf dep/obnc-libext_0.7.0.tar.gz
           cd obnc-0.16.1; ./build; ./install
           cd ../obnc-libext-0.7.0; ./build; ./install
-          pip install numpy
+          pip3 install numpy
 
       - name: Build
         run: |
@@ -91,7 +91,8 @@ jobs:
           echo "------------obnc-0.16.1---------------"
           ls obnc-0.16.1/
           cp -a obnc-0.16.1/* /c/msys64/usr/bin/
-          
+          pip install numpy
+
           #obnc -h
           cat obnc-0.16.1/README.txt
           cat obnc-0.16.1/obnc.bat
