@@ -4,22 +4,33 @@ public class Brainiac {
                                                          
                                                          
                                                          
+  final static int PYRAMIDAL = 0;                        
+  final static int INHIBITOR = 1;                        
   final static int SPD = 40; // Synapses per Dendrite    
-  final static int PPP = 48; // Proximal per Pyramidal   
-  final static int BPP = 48; // Basal per Pyramidal      
-  final static int APP = 48; // Apical per Pyramidal     
-  final static int PinL2 = 32; // Pyramidal in L2        
-  final static int PinL4 = 32; // Pyramidal in L4        
-  final static int Acc4  = 32 + PinL2;                   
-  final static int PinL5 = 32; // Pyramidal in L5        
-  final static int Acc5  = 32 + Acc4;                    
-  final static int PinL6 = 32; // Pyramidal in L6        
-  final static int Acc6  = 32 + Acc5;                    
+  final static int DSZ = 40 * 4; // 32 bits per Synapse  
+  final static int PPP = 32; // Proximal per Pyramidal   
+  final static int BPP = 32; // Basal per Pyramidal      
+  final static int APP = 32; // Apical per Pyramidal     
+  final static int DPN = 32 + 32 + 32;                   
+  final static int PinL2 = 28; // Pyramidal in L2        
+  final static int Acc2  = 28;                           
+  final static int PinL4 = 28; // Pyramidal in L4        
+  final static int Acc4  = 28 + PinL2;                   
+  final static int PinL5 = 28; // Pyramidal in L5        
+  final static int Acc5  = 28 + Acc4;                    
+  final static int PinL6 = 28; // Pyramidal in L6        
+  final static int Acc6  = 28 + Acc5;                    
   final static int PinTh = 4;  // Pyramidal in Thalmus   
   final static int AccTh = 4  + Acc6;                    
-  final static int MCinC = 128; // Minicolumns per Column
+  final static int MCinC = 96 ; // Minicolumns per Column
   final static int CinP = 9  ; // Columns in a Patch     
-  final static int NP = 152064;                          
+  final static int NP = 100224;                          
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
                                                          
                                                          
                                                          
@@ -57,14 +68,14 @@ public class Brainiac {
     Pyramidal[] L4;                                      
     Pyramidal[] L5;                                      
     Pyramidal[] L6;                                      
-    Pyramidal[] Thalmus;                                 
+    Pyramidal[] Th;                                      
                                                          
     public Minicolumn(){                                 
            L2 = new Pyramidal[PinL2];                    
            L4 = new Pyramidal[PinL4];                    
            L5 = new Pyramidal[PinL5];                    
            L6 = new Pyramidal[PinL6];                    
-           Thalmus = new Pyramidal[PinTh];               
+           Th = new Pyramidal[PinTh];                    
     }                                                    
   }                                                      
                                                          
@@ -128,19 +139,19 @@ public class Brainiac {
     if (args.length > 0) {                               
       System.out.println("  initializing "+args[0]);     
       String pexfn="b-"+args[0]+                         
-         "-9-128-4-32-32-32-32-0-0-0.pex";               
+         "-9-96-4-28-28-28-28-0-0-0.pex";                
       String dndfn="b-"+args[0]+                         
-         "-9-128-4-32-32-32-32-48-48-48-40-0-0-0.dnd";   
+         "-9-96-4-28-28-28-28-32-32-32-40-0-0-0.dnd";    
       try (                                              
         InputStream fpex = new FileInputStream(pexfn);   
         InputStream fdnd = new FileInputStream(dndfn);   
       ) {                                                
         dp= SPD+PPP+BPP+APP;                             
-                                                         
         System.out.println("   dendrites:    "+dp*NP);   
         System.out.println("   p cells  :      "+NP);    
-        System.out.println("   miniclmns:        "+      
+        System.out.println("   miniclmns:         "+     
                            CinP*MCinC);                  
+        System.out.println("   loading...");             
         P = new Patch();                                 
         for(int i=0;i<NP;i++){                           
           a = la2sa(i);c=a[0];mc=a[1];lv=a[2];lvo=a[3];  
@@ -155,6 +166,27 @@ public class Brainiac {
     }                                                    
     return P;                                            
   }                                                      
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
                                                          
                                                          
                                                          

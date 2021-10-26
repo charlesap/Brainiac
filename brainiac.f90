@@ -4,22 +4,33 @@ implicit none
                                                          
                                                          
                                                          
+ integer, parameter :: PYRAMIDAL = 0                     
+ integer, parameter :: INHIBITOR = 1                     
  integer, parameter :: SPD = 40                          
- integer, parameter :: PPP = 48                          
- integer, parameter :: BPP = 48                          
- integer, parameter :: APP = 48                          
- integer, parameter :: PinL2 = 32                        
- integer, parameter :: PinL4 = 32                        
- integer, parameter :: Acc4  = 32 + PinL2                
- integer, parameter :: PinL5 = 32                        
- integer, parameter :: Acc5  = 32 + Acc4                 
- integer, parameter :: PinL6 = 32                        
- integer, parameter :: Acc6  = 32 + Acc5                 
+ integer, parameter :: DSZ = 40 * 4                      
+ integer, parameter :: PPP = 32                          
+ integer, parameter :: BPP = 32                          
+ integer, parameter :: APP = 32                          
+ integer, parameter :: DPN = 32 + 32 + 32                
+ integer, parameter :: PinL2 = 28                        
+ integer, parameter :: Acc2  = 28                        
+ integer, parameter :: PinL4 = 28                        
+ integer, parameter :: Acc4  = 28 + PinL2                
+ integer, parameter :: PinL5 = 28                        
+ integer, parameter :: Acc5  = 28 + Acc4                 
+ integer, parameter :: PinL6 = 28                        
+ integer, parameter :: Acc6  = 28 + Acc5                 
  integer, parameter :: PinTh = 4                         
  integer, parameter :: AccTh = 4  + Acc6                 
- integer, parameter :: MCinC = 128                       
+ integer, parameter :: MCinC = 96                        
  integer, parameter :: CinP = 9                          
- integer, parameter :: NP = 152064                       
+ integer, parameter :: NP = 100224                       
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
                                                          
                                                          
                                                          
@@ -128,17 +139,17 @@ CONTAINS
     if ( icount.gt.0 ) then                              
       call getarg(1, arg)                                
       print *,' initializing ', TRIM(arg)                
-      td="-9-128-4-32-32-32-32-48-48-48-40-0-0-0.dnd"    
-      tp="-9-128-4-32-32-32-32-0-0-0.pex"                
+      td="-9-96-4-28-28-28-28-32-32-32-40-0-0-0.dnd"     
+      tp="-9-96-4-28-28-28-28-0-0-0.pex"                 
       open (1,file="b-"//TRIM(arg)//tp, status = 'old')  
       open (2,file="b-"//TRIM(arg)//td, status = 'old')  
                                                          
                                                          
       dp= SPD+PPP+BPP+APP                                
-                                                         
       print *,'  dendrites:', dp*NP                      
       print *,'  p cells  :', NP                         
       print *,'  miniclmns:', CinP*MCinC                 
+      print *,'  loading...'                             
       ALLOCATE ( P(NP*dp), STAT = astat)                 
       IF (astat /= 0) STOP "*** OOM ***"                 
       ALLOCATE ( S(np),    STAT = astat)                 
@@ -158,6 +169,27 @@ CONTAINS
     endif                                                
     RETURN                                               
   END SUBROUTINE                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
                                                          
                                                          
                                                          
