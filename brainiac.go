@@ -2,8 +2,11 @@
 package main                                             
 import "fmt"                                                         
 import "os"                                             
+import "bufio"                                                         
+import "time"                                              
                                                          
-const (                                                    
+const (                                                  
+                                                         
   PYRAMIDAL = 0                                            
   INHIBITOR = 1                                            
   SPD = 40  // Synapses per Dendrite                       
@@ -38,22 +41,33 @@ type Potential struct { excited bool }
                                                          
                                                          
                                                          
-type Synapse *Potential                                  
+type Synapse int32                                       
                                                          
                                                          
                                                          
-type Dendrite [SPD]Synapse                                                                                  
+type Dendrite   struct {                                                                                    
+        S [SPD]Synapse                                   
+     }                                                   
                                                          
                                                          
                                                          
                                                          
                                                          
                                                          
-type Pyramidal struct {                                                                                     
-       State Potential                                                                                      
-       Proximal [PPP]Dendrite                                                                               
-       Basal [BPP]Dendrite                                                                                  
-       Apical [APP]Dendrite                                                                                 
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+type Neuron    struct {                                                                                     
+       State int16                                                                                          
+       Kind  int16                                                                                          
+       De    [DPN]Dendrite                                                                                  
+                                                                                                            
      }                                                                                                      
                                                          
                                                          
@@ -63,12 +77,20 @@ type Pyramidal struct {
                                                          
                                                          
                                                          
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
 type Minicolumn struct {                                                                                    
-       L2 [PinL2]Pyramidal                                                       
-       L4 [PinL4]Pyramidal                                                       
-       L5 [PinL5]Pyramidal                                                       
-       L6 [PinL6]Pyramidal                                                        
-       Th [PinTh]Pyramidal                           
+        N [AccTh]Neuron                                                          
+                                                                                 
+                                                                                  
+                                                                                   
+                                                     
      }                                                   
                                                          
                                                          
@@ -83,6 +105,9 @@ type Column struct {
        MC [MCinC]Minicolumn                                                       
      }                                                      
                                                          
+                                                        
+                                                        
+                                                        
                                                         
                                                         
                                                         
@@ -109,17 +134,17 @@ type Patch  struct {
                                                          
                                                          
                                                          
-func la2sa( a int )(c,mc,lv,lvo int){                                                                                 
-   mci:=a % AccTh                                                                                                  
+func la2sa( a int )(c,mc,ni,lv,lvo int){                                                                                 
+    ni =a % AccTh                                                                                                  
    mco:= a / AccTh;       mc = mco % MCinC                                                                       
    co:= a / (AccTh*MCinC); c= co % CinP                                                                          
-   if       mci<PinL2{   lv=0;   lvo=mci                                                                          
-   }else if mci<Acc4{    lv=1;   lvo=mci-PinL2                                                                    
-   }else if mci<Acc5{    lv=2;   lvo=mci-Acc4                                                                     
-   }else if mci<Acc6{    lv=3;   lvo=mci-Acc5                                                                     
-   }else if mci<AccTh{   lv=4;   lvo=mci-Acc6                                                                     
+   if        ni<PinL2{   lv=0;   lvo= ni                                                                          
+   }else if  ni<Acc4{    lv=1;   lvo= ni-PinL2                                                                    
+   }else if  ni<Acc5{    lv=2;   lvo= ni-Acc4                                                                     
+   }else if  ni<Acc6{    lv=3;   lvo= ni-Acc5                                                                     
+   }else if  ni<AccTh{   lv=4;   lvo= ni-Acc6                                                                     
    }else{                lv=-1;  lvo=-1  }                                                                        
-   return c, mc, lv, lvo                                                                                          
+   return c, mc, ni, lv, lvo                                                                                          
 }                                                        
                                                          
                                                          
@@ -133,7 +158,7 @@ func la2sa( a int )(c,mc,lv,lvo int){
 func initialize() *Patch {                                    
                                                       
   P:=new(Patch)                                                        
-                                                       
+  tvs:=time.Now().UnixMilli()                           
   if len(os.Args) > 1 {
     fmt.Println("  initializing", os.Args[1])            
     pexfn:="b-"+os.Args[1]+
@@ -149,39 +174,39 @@ func initialize() *Patch {
         fmt.Println("   p cells  :     ", NP)                
         fmt.Println("   miniclmns:        ", CinP*MCinC)      
         fmt.Println("   loading...")                         
-        for i:=0; i<NP;i++{                                              
-      //    c,mc,lv,lvo:=la2sa(i)             
-      //  fmt.Println("--",i,c,mc,lv,lvo)
-                                               
-                                                       
-                                                       
-                                                                
-        }                                                                              
-        fpex.Close()                                                                   
-        fdnd.Close()                                                                   
-      }else{                                                                           
-        fmt.Println("  file",dndfn,"?",err2)                                           
-      }                                                                                     
+        d    := make([]byte, DPN*SPD*4)                                  
+        drdr := bufio.NewReader(fdnd)               
+        fpex.Close()                         
+        b,_ :=os.ReadFile(pexfn)               
+        for i:=0; i<NP;i++{                            
+            c,mc,ni,_,_:=la2sa(i)                      
+      //  fmt.Println("--",i,c,mc,lv,lvo)    
+          P.C[c].MC[mc].N[ni].Kind=                                                       
+              (int16)(b[i*4+0]+(b[i*4+1]<<8))
+          P.C[c].MC[mc].N[ni].State=                                       
+              (int16)(b[i*4+2]+(b[i*4+3]<<8))                                          
+          _,_   = drdr.Read(d    )                                                     
+          for j:=0; j<DPN; j++{                                                                                  
+            for k:=0; k<SPD; k++{                                                     
+              P.C[c].MC[mc].N[ni].De[j].S[k]=              
+              (Synapse)(d[((j*SPD)+k)*4+0]+(d[((j*SPD)+k)*4+1]<<8)+              
+              (d[((j*SPD)+k)*4+2]<<16)+(d[((j*SPD)+k)*4+3]<<24))             
+            }                                            
+          }                                              
+        }                                                
+        fdnd.Close()                                     
+      }else{                                             
+        fmt.Println("  file",dndfn,"?",err2)             
+      }                                                  
     }else{                                               
       fmt.Println("  file",pexfn,"?",err1)               
     }                                                    
-  }else{                                                 
+    fmt.Println("  MSEC INIT:",time.Now().UnixMilli()-tvs)                       
+  }else{                                                                                             
     fmt.Println("  parameter?")                          
   }                                                      
   return P                                               
 }                                                        
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
                                                          
                                                          
                                                          

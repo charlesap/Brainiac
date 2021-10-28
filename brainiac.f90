@@ -4,6 +4,9 @@ implicit none
                                                          
                                                          
                                                          
+                                                         
+                                                         
+                                                         
  integer, parameter :: PYRAMIDAL = 0                     
  integer, parameter :: INHIBITOR = 1                     
  integer, parameter :: SPD = 40                          
@@ -25,6 +28,28 @@ implicit none
  integer, parameter :: MCinC = 96                        
  integer, parameter :: CinP = 9                          
  integer, parameter :: NP = 100224                       
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
                                                          
                                                          
                                                          
@@ -109,10 +134,10 @@ CONTAINS
                                                          
                                                          
                                                          
-  SUBROUTINE la2sa(a,c,mc,lv,lvo)                        
+  SUBROUTINE la2sa(a,c,mc,ni,lv,lvo)                     
     implicit none                                        
     integer, INTENT(IN) :: a                             
-    integer, INTENT(INOUT) :: c,mc,lv,lvo                
+    integer, INTENT(INOUT) :: c,mc,ni,lv,lvo             
     integer :: np,mci,mco,co                             
                                                          
     mci=mod(a,AccTh)                                     
@@ -134,45 +159,45 @@ CONTAINS
     implicit none                                        
     character(256) :: arg, td, tp                        
     integer :: icount, dp,    astat,i,c,mc,lv,lvo        
-                                                         
+    integer(4) :: x                                      
+    real :: tvs,tve                                      
     icount = iargc()                                     
     if ( icount.gt.0 ) then                              
       call getarg(1, arg)                                
       print *,' initializing ', TRIM(arg)                
+      call cpu_time(tvs)                                 
       td="-9-96-4-28-28-28-28-32-32-32-40-0-0-0.dnd"     
       tp="-9-96-4-28-28-28-28-0-0-0.pex"                 
-      open (1,file="b-"//TRIM(arg)//tp, status = 'old')  
-      open (2,file="b-"//TRIM(arg)//td, status = 'old')  
-                                                         
-                                                         
+      open (1,file="b-"//TRIM(arg)//tp, status = 'old', &
+            form='unformatted',access='STREAM')          
+      open (2,file="b-"//TRIM(arg)//td, status = 'old', &
+                  form='unformatted',access='STREAM')    
       dp= SPD+PPP+BPP+APP                                
       print *,'  dendrites:', dp*NP                      
       print *,'  p cells  :', NP                         
       print *,'  miniclmns:', CinP*MCinC                 
       print *,'  loading...'                             
-      ALLOCATE ( P(NP*dp), STAT = astat)                 
+      ALLOCATE ( P(NP   ), STAT = astat)                 
       IF (astat /= 0) STOP "*** OOM ***"                 
-      ALLOCATE ( S(np),    STAT = astat)                 
+      ALLOCATE ( S(NP*DPN*SPD),    STAT = astat)         
       IF (astat /= 0) STOP "*** OOM ***"                 
-      DO i=0,NP-1                                        
-        call la2sa(i,c,mc,lv,lvo)                        
-!       print *,'--',i,c,mc,lv,lvo                       
+      read(1) P                                          
+!     DO i=1,NP                                          
+!       call la2sa(i-1,c,mc,lv,lvo)                      
+!       print *,'--',i-1,c,mc,lv,lvo                     
+!     END DO                                             
                                                          
                                                          
-      END DO                                             
-                                                         
-                                                         
-                                                         
-                                                         
+      read (2) S                                         
+      close (1)                                          
+      close (2)                                          
+      call cpu_time(tve)                                 
+      print *,' MSEC INIT:',tve-tvs                      
     else                                                 
       print *,' parameter?'                              
     endif                                                
     RETURN                                               
   END SUBROUTINE                                         
-                                                         
-                                                         
-                                                         
-                                                         
                                                          
                                                          
                                                          

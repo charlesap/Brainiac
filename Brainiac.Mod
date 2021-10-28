@@ -1,9 +1,12 @@
 (* Brainiac.Mod *)                                       
 MODULE Brainiac;                                         
                                                          
-IMPORT Args := extArgs, Err := extErr, Out, Files;       
+IMPORT Args := extArgs, Err := extErr, Out, Files, Input;
                                                          
 CONST                                                    
+                                                         
+                                                         
+                                                         
   PYRAMIDAL = 0;                                         
   INHIBITOR = 1;                                         
   SPD = 40; (* Synapses per Dendrite *)                  
@@ -42,7 +45,18 @@ TYPE
                                                          
                                                          
                                                          
-  Dendrite = ARRAY SPD OF Synapse;                       
+  Dendrite = RECORD                                      
+             S: ARRAY SPD OF Synapse                     
+            END;                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
                                                          
                                                          
                                                          
@@ -55,6 +69,14 @@ TYPE
              De:    ARRAY DPN OF Dendrite                
                                                          
            END;                                          
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
                                                          
                                                          
                                                          
@@ -82,6 +104,9 @@ TYPE
   Column = RECORD                                        
                  MC: ARRAY MCinC OF Minicolumn           
                END;                                      
+                                                         
+                                                         
+                                                         
                                                          
                                                          
                                                          
@@ -133,13 +158,16 @@ END la2sa;
 PROCEDURE initialize(VAR p: PPatch);                     
 CONST td ="-9-96-4-28-28-28-28-32-32-32-40-0-0-0.dnd";   
       tp ="-9-96-4-28-28-28-28-0-0-0.pex";               
-VAR i,res,dp,c,mc,ni,lv,lvo:INTEGER;fdnd,fpex:Files.File;
+VAR i,j,k,res,dp,c,mc,ni,lv,lvo,tvs,tve:INTEGER;         
+      fdnd,fpex:Files.File; b1,b2,b3,b4:BYTE;            
       arg,pexfn,dndfn:ARRAY 256 OF CHAR;                 
       n: POINTER TO Neuron;rdnd,rpex:Files.Rider;        
+      dbuf: ARRAY SPD * 4 OF BYTE;                       
 BEGIN                                                    
   IF Args.count > 0 THEN Args.Get(0, arg, res);          
     IF res = 0 THEN                                      
       OS("  initializing "); OS(arg); NL;                
+      tvs:=Input.Time();                                 
       pexfn:="b-";SAP(pexfn,arg);SAP(pexfn,tp);          
       dndfn:="b-";SAP(dndfn,arg);SAP(dndfn,td);          
       fpex:=Files.Old(pexfn);                            
@@ -156,39 +184,36 @@ BEGIN
           NEW(p);                                        
           i:=0; WHILE (i<NP) DO                          
             la2sa(i,c,mc,ni,lv,lvo);                     
-        (*  n:=p.C[c].MC[mc].N[ni]; *)                   
-            Files.ReadInt(rpex,p.C[c].MC[mc].N[ni].Kind);
-          Files.ReadInt(rpex,p.C[c].MC[mc].N[ni].State); 
-                                                         
-                                                         
-    (*      OS("--");OI(i,8);OI(c,8);OI(mc,8);           
-            OI(lv,8);OI(lvo,8);NL;      *)               
+            Files.Read(rpex,b1);Files.Read(rpex,b2);     
+            p.C[c].MC[mc].N[ni].Kind:=b1+(b2*100H);      
+            Files.Read(rpex,b1);Files.Read(rpex,b2);     
+            p.C[c].MC[mc].N[ni].State:=b1+(b2*100H);     
+            j:=0; WHILE (j<DPN) DO                       
+              Files.ReadBytes(rdnd,dbuf,SPD*4);          
+              k:=0; WHILE (k<SPD) DO                     
+                res:=dbuf[k*4]+(dbuf[k*4+1]*100H);       
+                res:=res+dbuf[k*4+2]*10000H;             
+                res:=res+dbuf[k*4+3]*1000000H;           
+                p.C[c].MC[mc].N[ni].De[j].S[k]:=res;     
+                INC(k)                                   
+              END;                                       
+      (*      OS("--");OI(i,8);OI(c,8);OI(mc,8);         
+              OI(lv,8);OI(lvo,8);NL;      *)             
+              INC(j)                                     
+            END;                                         
             INC(i)                                       
           END                                            
         ELSE  OS("  file "); OS(dndfn); OS("?"); NL;     
         END                                              
       ELSE  OS("  file "); OS(pexfn); OS("?"); NL;       
-      END                                                
+      END;                                               
+      tve:=Input.Time();                                 
+      OS("  MSEC INIT:" ); OI(tve-tvs,12); NL;           
     ELSE  OS("  config?"); NL;                           
     END                                                  
   ELSE  OS("  parameter?"); NL;                          
   END                                                    
 END initialize;                                          
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
                                                          
                                                          
                                                          

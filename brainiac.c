@@ -24,7 +24,7 @@
 #define PinL6   28  // Pyramidal in L6                     
 #define Acc6    112                                        
 #define PinTh   4   // Pyramidal in Thalmus                
-#define AccTh   116                                        
+#define AccTh   116  // Consider the Hippocampus           
 #define MCinC   96 // 128 // Minicolumns in a Column       
 #define CinP    9   // Columns in a Patch                  
 #define NP      100224 // 152064                           
@@ -52,6 +52,17 @@ typedef struct { Synapse s[SPD];} Dendrite;
                                                            
                                                            
                                                            
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
 typedef struct {                                           
        uint16_t Kind;                                      
                                                            
@@ -61,6 +72,14 @@ typedef struct {
                                                            
                                                            
      } Neuron;                                             
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
                                                            
                                                            
                                                            
@@ -85,6 +104,9 @@ typedef struct {
 typedef struct {                                           
          Minicolumn MC[MCinC];                             
      } Column;                                             
+                                                           
+                                                           
+                                                           
                                                            
                                                            
                                                            
@@ -136,7 +158,7 @@ typedef struct {
 Patch * initialize( int argc, char *argv[]){               
   FILE * fpex; FILE * fdnd; int dp,   i,j ; Patch *P;      
   char  hdr[4096]; char dndfn[1024]; char pexfn[1024];     
-  struct timeval tvs,tve;                                  
+  struct timeval tvs,tve;float elapsed;                    
   if ( argc > 1 ) {                                        
     printf("  initializing %s\n",argv[1]);                 
     gettimeofday(&tvs,NULL);                               
@@ -181,9 +203,9 @@ Patch * initialize( int argc, char *argv[]){
       printf("  file %s?\n",pexfn);                        
     }                                                      
     gettimeofday(&tve,NULL);                               
-    printf("  MSEC INIT: %d\n",tve.tv_usec-tvs.tv_usec);   
-                                                           
-                                                           
+    elapsed = (tve.tv_sec-tvs.tv_sec)*1000.0f +            
+              (tve.tv_usec-tvs.tv_usec)/1000.0f;           
+    printf("  MSEC INIT: %f\n",elapsed);                   
                                                            
                                                            
                                                            

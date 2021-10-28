@@ -11,7 +11,7 @@ cbrainiac: brainiac.c
 	$(CC) -o cbrainiac brainiac.c 
 
 fbrainiac: brainiac.f90
-	$(FC) -Og -std=f95 -fall-intrinsics -o fbrainiac brainiac.f90
+	$(FC) -Og -std=f2003 -fall-intrinsics -o fbrainiac brainiac.f90
 
 obrainiac: Brainiac.Mod
 	$(OC) -o obrainiac Brainiac.Mod
@@ -57,6 +57,26 @@ jtest: Brainiac.jar
 	cd tests; java -jar ../Brainiac.jar foo | grep -v MSEC > ../jtest; diff ../jtest commontest.output
 
 test: ctest ftest otest gotest pytest jtest
+
+ctime: cbrainiac
+	cd tests; ../cbrainiac foo | grep MSEC
+
+ftime: fbrainiac
+	cd tests; ../fbrainiac foo | grep MSEC
+
+otime: obrainiac
+	cd tests; ../obrainiac foo | grep MSEC
+
+gotime: gobrainiac
+	cd tests; ../gobrainiac foo | grep MSEC
+
+pytime: src/brainiac/brainiac.py
+	cd tests; python3 ../src/brainiac/brainiac.py foo | grep MSEC
+
+jtime: Brainiac.jar
+	cd tests; java -jar ../Brainiac.jar foo | grep MSEC
+
+time: ctime ftime otime gotime pytime jtime
 
 pretty: src/brainiac/brainiac.py brainiac.go
 	black src/brainiac/brainiac.py
